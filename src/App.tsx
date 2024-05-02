@@ -13,11 +13,25 @@ import MovieDetails from "./components/movieDetails/MovieDetails";
 import WatchedSummary from "./components/watchedSummary/WatchedSummary";
 import WatchedMoviesList from "./components/watchedMoviesList/WatchedMoviesList";
 
+interface WatchedMovie {
+  imdbID: string;
+  title: string;
+  year: string;
+  poster: string;
+  imdbRating: number;
+  runtime: number;
+  userRating: number;
+  countRatingDecisions: number;
+}
+
 export default function App() {
   const [query, setQuery] = useState<string>("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { movies, isLoading, error } = useMovies(query);
-  const [watched, setWatched] = useLocalStorageState([], "watched");
+  const [watched, setWatched] = useLocalStorageState<WatchedMovie[]>(
+    [],
+    "watched"
+  );
 
   function handleSelectMovie(id: string) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -27,7 +41,7 @@ export default function App() {
     setSelectedId(null);
   }
 
-  function handleAddWatched(movie) {
+  function handleAddWatched(movie: WatchedMovie) {
     setWatched((watched) => [...watched, movie]);
   }
 
